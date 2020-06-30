@@ -2,4 +2,4 @@
 
 ## Overview
 
-FRESH:COM (FaiR Energy SHaring in local COMmunities)
+FRESH:COM (FaiR Energy SHaring in local COMmunities) is a linear optimization model.
