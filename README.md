@@ -9,6 +9,8 @@ Technologies included: Photovoltaic (PV) and Battery Energy Storage Systems(BESS
 
 Allocation mechanism: Peer-to-peer trading under the consideration of each prosumer’s individual willingness-to-pay (including individual incentives for participation in energy communities)
 
+The Jupyter notebook shows a small use case and its results.
+
 Contact: perger@eeg.tuwien.ac.at
 
 Further info: https://www.youtube.com/watch?v=yZ8Slzti9tM
