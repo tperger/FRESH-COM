@@ -13,7 +13,10 @@ The Jupyter notebook shows a small use case and its results.
 
 Contact: perger@eeg.tuwien.ac.at
 
-Further info: https://www.youtube.com/watch?v=yZ8Slzti9tM
+## References
+[1] T. Perger, L. Wachter, A. Fleischhacker, H. Auer, PV sharing in local communities: Peer-to-peer trading under consideration of the prosumers’ willingness-to-pay, In: Sustainable Cities and Society (2021), DOI: https://doi.org/10.1016/j.scs.2020.102634 
+
+Video showing further developments and applications of FRESH:COM: https://www.youtube.com/watch?v=yZ8Slzti9tM
 
 ## Licence
 
