@@ -130,7 +130,7 @@ alpha = pd.read_excel('Input_data_community_other.xlsx',
                       index_col='Prosumer')
 
 if clustering:
-    emissions, load, PV, time_steps = FRESH_clustering.cluster_input_data(prosumer, 
+    emissions, load, PV, time_steps, counts = FRESH_clustering.cluster_input(prosumer, 
                                                                           emissions, 
                                                                           load, 
                                                                           PV, 
