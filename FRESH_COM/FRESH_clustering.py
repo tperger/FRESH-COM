@@ -23,7 +23,7 @@ def custom_norm(timeseries):
         norm_array = timeseries.to_numpy()
     return norm_array, norm
 
-def cluster_input_data(prosumer, emissions, load, PV, k, hours):
+def cluster_input(prosumer, emissions, load, PV, k, hours):
     """ Clustering of hourly input data into representative time periods using 
     k-means clustering algorithm
     
@@ -75,7 +75,7 @@ def cluster_input_data(prosumer, emissions, load, PV, k, hours):
     
     # Scale k-means results according to weights 
     #for i in unique:
-    #    result_kmeans[i,:] *= counts[i]
+    #    result_kmeans[i,:] *= counts[i] / (sum(counts[j] for j in unique))
     
     # Re-scale and create data frames with representative times
     j = 0
@@ -100,4 +100,4 @@ def cluster_input_data(prosumer, emissions, load, PV, k, hours):
     
     time_clustered = emissions_cluster.index
         
-    return emissions_cluster, load_cluster, PV_cluster, time_clustered
+    return emissions_cluster, load_cluster, PV_cluster, time_clustered, counts

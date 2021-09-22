@@ -9,14 +9,13 @@ import numpy as np
 import pandas as pd
 from pyomo.environ import *
 
-def run_optimization(prosumer, cm, battery, solver_name):
+def run_LP(prosumer, cm, weight, battery, solver_name):
 
     # deactivate BESS
     if battery == False:
         for i in prosumer:
             cm.prosumer_data.loc[cm.SoC_max,i] = 0
-            cm.prosumer_data.loc[cm.q_bat_max,i] = 0
-        
+            cm.prosumer_data.loc[cm.q_bat_max,i] = 0            
     
     # Define model as concrete model
     model = ConcreteModel()
@@ -104,24 +103,24 @@ def run_optimization(prosumer, cm, battery, solver_name):
     community_welfare = {new_list: [] for new_list in prosumer}
     prosumer_welfare = {new_list: [] for new_list in prosumer}
     prosumer_welfare2 = {new_list: [] for new_list in prosumer}
-    
+       
     
     for i in prosumer:
-        community_welfare[i] = sum(- cm.p_grid_in * model.q_grid_in[t,i]
-                                   + cm.p_grid_out * model.q_grid_out[t,i] 
+        community_welfare[i] = sum(- cm.p_grid_in * model.q_grid_in[t,i]*weight[t]
+                                   + cm.p_grid_out * model.q_grid_out[t,i]*weight[t] 
                                    for t in cm.time_steps)
         prosumer_welfare[i] = sum((cm.p_grid_in 
                                    + (cm.prosumer_data.loc[cm.w,j]
                                       * (1 - cm.distances.loc[i,j]))
                                    * cm.emissions.Emissions.loc[t] / 1000000)
-                                  * model.q_share[t,i,j] 
+                                  * model.q_share[t,i,j]*weight[t] 
                                   for j in prosumer 
                                   for t in cm.time_steps)
         prosumer_welfare2[i] = sum((cm.p_grid_in 
                                     + (cm.prosumer_data.loc[cm.w,i]
-                                       * (1 - cm.distances.loc[i,j]))
+                                       * (1 - cm.distances.loc[j,i]))
                                     * cm.emissions.Emissions.loc[t] / 1000000)
-                                   * model.q_share[t,j,i] 
+                                   * model.q_share[t,j,i]*weight[t] 
                                    for j in prosumer 
                                    for t in cm.time_steps)
     
@@ -130,7 +129,7 @@ def run_optimization(prosumer, cm, battery, solver_name):
     
     model.obj = Objective(
         expr = sum(community_welfare[i] 
-                   + prosumer_welfare[i] 
+                   + prosumer_welfare2[i] 
                    for i in prosumer), 
         sense = maximize)
     
@@ -144,18 +143,18 @@ def run_optimization(prosumer, cm, battery, solver_name):
     for j in prosumer:
         a = []
         for i in prosumer:
-            a.append(value(sum(model.q_share[t,i,j] for t in cm.time_steps)))
+            a.append(value(sum(model.q_share[t,i,j]*weight[t] for t in cm.time_steps)))
         q_share_total[j] = a
     
     results= pd.DataFrame(index=prosumer)
     for i in prosumer:
-        results.loc[i,'buying grid'] = value(sum(model.q_grid_in[t,i] 
+        results.loc[i,'buying grid'] = value(sum(model.q_grid_in[t,i]*weight[t] 
                                                  for t in cm.time_steps))
-        results.loc[i,'selling grid'] = value(sum(model.q_grid_out[t,i] 
+        results.loc[i,'selling grid'] = value(sum(model.q_grid_out[t,i]*weight[t] 
                                                   for t in cm.time_steps))
-        results.loc[i,'battery charging'] = value(sum(model.q_bat_in[t,i] 
+        results.loc[i,'battery charging'] = value(sum(model.q_bat_in[t,i]*weight[t] 
                                                       for t in cm.time_steps))
-        results.loc[i,'battery discharging'] = value(sum(model.q_bat_out[t,i] 
+        results.loc[i,'battery discharging'] = value(sum(model.q_bat_out[t,i]*weight[t] 
                                                          for t in cm.time_steps))
         results.loc[i,'self-consumption'] = q_share_total.loc[i,i]
         results.loc[i,'buying community'] = (sum(q_share_total.loc[j,i] 
@@ -164,12 +163,12 @@ def run_optimization(prosumer, cm, battery, solver_name):
         results.loc[i,'selling community'] = (sum(q_share_total.loc[i,j] 
                                                   for j in prosumer) 
                                               - q_share_total.loc[i,i])
-        results.loc[i,'emissions'] = value(sum(model.q_grid_in[t,i]
+        results.loc[i,'emissions'] = value(sum(model.q_grid_in[t,i]*weight[t]
                                                * cm.emissions.Emissions.loc[t]
                                                / 1000000 
                                                 for t in cm.time_steps))
         results.loc[i,'costs'] = (value(-community_welfare[i]) 
                                       - value(prosumer_welfare[i]) 
-                                      + value(prosumer_welfare2[i])) 
+                                      + value(prosumer_welfare2[i]))
     
     return results, q_share_total, social_welfare
