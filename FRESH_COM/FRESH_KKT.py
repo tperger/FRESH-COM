@@ -13,7 +13,7 @@ from pyomo.environ import *
 
     
 def run_KKT(prosumer, prosumer_new, prosumer_old, results_old,
-            PV_max, load_min, load_max,
+            PV_min, PV_max, load_min, load_max,
             cm, weight, battery, solver_name):
     
     # deactivate BESS
@@ -90,10 +90,15 @@ def run_KKT(prosumer, prosumer_new, prosumer_old, results_old,
     model.load_min_bin_con = Constraint(prosumer_new, 
                                     rule = load_min_bin_rule)
     
-    def PV_bin_rule(model, i):
+    def PV_max_bin_rule(model, i):
         return (model.PV_new[i]  <= model.b[i] * PV_max)
-    model.PV_bin_con = Constraint(prosumer_new, 
-                                  rule = PV_bin_rule)
+    model.PV_max_bin_con = Constraint(prosumer_new, 
+                                  rule = PV_max_bin_rule)
+    
+    def PV_min_bin_rule(model, i):
+        return (model.PV_new[i]  >= model.b[i] * PV_min)
+    model.PV_min_bin_con = Constraint(prosumer_new, 
+                                  rule = PV_min_bin_rule)
     
     # From KKT
     def q_G_in_complementarity_rule_1(model, i, t):
@@ -389,7 +394,7 @@ def run_KKT(prosumer, prosumer_new, prosumer_old, results_old,
     F5 = sum(costs[i] for i in prosumer_old)
     
     # choose one of the objective functions F1, F2, ... defined above
-    model.obj = Objective(expr = F4, 
+    model.obj = Objective(expr = F2, 
                           sense = minimize)
     
     opt = SolverFactory(solver_name)

@@ -25,10 +25,11 @@ prosumer_old = (['Prosumer 1',
                  'Prosumer 4', 
                  'Prosumer 5', 
                  'Prosumer 6'])
-prosumer_new = (['Prosumer H0_50'])
+prosumer_new = (['Prosumer H0'])
 prosumer = prosumer_old + prosumer_new
 
-PV_max = 5 # kWpeak
+PV_min = 0
+PV_max = 5 # kWpeakp
 load_min = 2 # 1000kWh/year
 load_max = 8 # 1000kWh/year
 
@@ -49,6 +50,7 @@ results, q_share, social_welfare, parameter, CE = FRESH_KKT.run_KKT(prosumer,
                                                                 prosumer_new,
                                                                 prosumer_old,
                                                                 results_old,
+                                                                PV_min,
                                                                 PV_max, 
                                                                 load_min, 
                                                                 load_max,
@@ -60,7 +62,7 @@ results, q_share, social_welfare, parameter, CE = FRESH_KKT.run_KKT(prosumer,
 
 # plot results
 
-path_to_graphics = ('...')
+path_to_graphics = ('')
 
 FRESH_plots.prosumer_data(load=cm.load, 
                           PV=cm.PV, 
@@ -105,9 +107,3 @@ FRESH_plots.prosumer_data_all(load=cm.load,
                           weight_cluster=weight,
                           save=False,
                           file=Path(path_to_graphics+'prosumer_data_all.pdf'))
-
-# FRESH_plots.plot_avg_values(input_df=cm.load, 
-#                             prosumer=prosumer_old, 
-#                             y_label='average hourly demand (kWh)', 
-#                             save=False, 
-#                             file=Path(path_to_graphics+"Appendix_avg_load.pdf"))

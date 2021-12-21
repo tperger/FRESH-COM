@@ -10,14 +10,16 @@ import pandas as pd
 from datetime import timedelta, datetime
 import pyam
 import FRESH_clustering
+from pathlib import Path
+import glob
 
 
 # Model name and version, scenario, region
 model_name = 'FRESH:COM v2.0'
 scenario_name = 'Default scenario'
 region_name = 'Austria'
-filename_community = 'Input_data_community_IAMC.xlsx'
-filename_grid = 'Input_data_grid_IAMC.xlsx'
+#filename_community = 'Input_data_community_IAMC.xlsx'
+filename_grid = 'Input_data_grid_IAMC.csv'
 filename_output = 'output_iamc.xlsx'
 
 clustering = True
@@ -33,9 +35,20 @@ for t in range(24*number_days):
     time_steps.append((datetime.fromisoformat(start_date+time_zone)+t*delta))
 index_time = list(range(len(time_steps)))
 
-# Read Input Data (from the IAMC Format
-file_community = pd.ExcelFile(filename_community)
-prosumer = file_community.sheet_names
+# Read Input Data (from the IAMC Format)
+
+# input data of prosuemr
+#_p = Path('Input_data/Prosumer_data')
+prosumer_files = {}
+prosumer = []
+for file in glob.glob("*.csv"):
+    i = Path(file).stem
+    if i.startswith('Prosumer'):
+        prosumer.append(i)
+        prosumer_files[i] = Path(file)
+
+#file_community = pd.ExcelFile(filename_community)
+#prosumer = file_community.sheet_names
 
 # Electricity demand, PV generation, and other prosumer data
 variable_load = 'Final Energy|Residential and Commercial|Electricity'
@@ -54,7 +67,7 @@ prosumer_data = pd.DataFrame()
 
 for i in prosumer:
     # read excel sheet and convert to pyam.IamDataFrame
-    _df = pd.read_excel(file_community, i)
+    _df = pd.read_csv(prosumer_files[i], sep=';')
     _df_pyam = pyam.IamDataFrame(_df)
     
     # filter data (load)
@@ -88,7 +101,7 @@ for i in prosumer:
                               axis=1).rename(columns={'value':i})
     
 # Prices
-_df = pd.read_excel(filename_grid)
+_df = pd.read_csv(filename_grid, sep=';')
 _df_pyam = pyam.IamDataFrame(_df)
 
 _data = (_df_pyam
@@ -120,14 +133,14 @@ emissions = pd.concat([emissions, _b['value'].reindex(time_steps)],
 
 # Other values
 eta_battery = 0.9
-distances = pd.read_excel('Input_data_community_other.xlsx',
-                          sheet_name='Distances',
-                          header=0, 
-                          index_col='Prosumer')
-alpha = pd.read_excel('Input_data_community_other.xlsx',
-                      sheet_name='Alpha',
-                      header=0, 
-                      index_col='Prosumer')
+distances = pd.read_csv('Input_data_distances.csv',
+                         sep=';',
+                         header=0, 
+                         index_col='Prosumer')
+alpha = pd.read_csv('Input_data_alpha.csv',
+                         sep=';',
+                         header=0, 
+                         index_col='Prosumer')
 
 if clustering:
     emissions, load, PV, time_steps, counts = FRESH_clustering.cluster_input(prosumer, 
