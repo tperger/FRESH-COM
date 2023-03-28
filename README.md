@@ -54,6 +54,8 @@ In this model, the implementation of the proposed method is conducted for one pe
 * `FRESH_LP.py` solves the linear program for optimal allocation of peer-to-peer trading in an energy community (corresponds with minor changes to the model presented in [1])
 * `FRESH_KKT.py` solves the bi-level model for dynamic participation (explained in [2])
 * `FRESH_define_community.py` uses the *pyam* package to process input data presented in the [openENTRANCE common data format](https://github.com/openENTRANCE/openentrance)
+* `FRESH_clustering.py` clusters hourly input data that is available for one year into representative days using *k-means*
+* `FRESH_plots.py`creates figures and graphs that are shown in [2]
 
 ## Scientific publications
 [1] T. Perger, L. Wachter, A. Fleischhacker, H. Auer, PV sharing in local communities: Peer-to-peer trading under consideration of the prosumers’ willingness-to-pay, In: Sustainable Cities and Society (2021), DOI: https://doi.org/10.1016/j.scs.2020.102634 
