@@ -1,9 +1,13 @@
 # FRESH:COM
 
 FaiR Energy SHaring in local COMmunities
+<img align="right" height="150" src="https://user-images.githubusercontent.com/48787841/228228557-744dcba5-bc8b-464b-b2b9-3abeab6014ba.jpg">
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5791940.svg)](https://doi.org/10.5281/zenodo.5791940)
+
+
+The peer-to-peer electricity trading model FRESH:COM developed by TU Wien is part of the case study “Behavior of communities of actors” within the [Horizon 2020 openENTRANCE project](https://openentrance.eu). 
 
 ## Overview on the method
 
