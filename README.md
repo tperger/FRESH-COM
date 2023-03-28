@@ -1,5 +1,10 @@
 # FRESH:COM
 
+FaiR Energy SHaring in local COMmunities
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5791940.svg)](https://doi.org/10.5281/zenodo.5791940)
+
 ## Overview on the method
 
 ### Modeling framework
@@ -14,14 +19,16 @@ In this context, new prosumers are characterized by (i) electricity load/ demand
 
 ### Flow chart
 
+## How to run the model
 
+### Requirements
+
+Pyomo, Gurobi (or other solver), pyam 
 
 ## References
 [1] T. Perger, L. Wachter, A. Fleischhacker, H. Auer, PV sharing in local communities: Peer-to-peer trading under consideration of the prosumers’ willingness-to-pay, In: Sustainable Cities and Society (2021), DOI: https://doi.org/10.1016/j.scs.2020.102634 
 
 [2] Perger T and Auer H. Dynamic participation in local energy communities with peer-to-peer trading [version 1; peer review: 1 approved]. Open Research Europe 2022, 2:5 (https://doi.org/10.12688/openreseurope.14332.1)
-
-Video showing further developments and applications of FRESH:COM: https://www.youtube.com/watch?v=yZ8Slzti9tM
 
 ## Licence
 
