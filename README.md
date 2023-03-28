@@ -25,6 +25,9 @@ In this context, new prosumers are characterized by (i) electricity load/ demand
 
 The minimum length of a contract for prosumer participation in energy communities is assumed to be one year. There is a deadline each year; until then, members can decide to leave the community in the next contract period, or decide to stay and extend the contract for another year. In the meantime, prospective new members can declare interest in joining the community until the annual deadline. The following process is used to optimize dynamic participation in energy communities over a horizon of several years:
 
+<img align="left" height=450 src="https://user-images.githubusercontent.com/48787841/228234079-7f6fc136-0d55-4124-aee3-400e3ee83309.png">
+
+
 * The starting point is the "old" community, where some members leave at the end of their contract period.
 
 * The status quo of the remaining members is then captured. Previous analyses of peer-to-peer electricity trading under the consideration of prosumers' willingness-to-pay demonstrate two important characteristics for a community and its members: Overall community welfare, and the annual emissions and costs of each member. These indicators are obtained by solving a linear program (see the model presented in [1]) to maximize community welfare of the original community configuration. The annual costs and emissions are then used as "benchmarks" for the optimization process.
@@ -33,13 +36,17 @@ The minimum length of a contract for prosumer participation in energy communitie
 
 * Finally, the new community is defined and the process repeats in the next year.
 
-In this model, the implementation of the proposed method is conducted for one period (year) in order to focus on the selection process of the community that is conducted using the bi-level optimization approach.
+In this model, the implementation of the proposed method is conducted for one period (year) in order to focus on the selection process of the community that is conducted using the bi-level optimization approach. 
+
 
 ## How to run the model
 
 ### Requirements
 
-Pyomo, Gurobi (or other solver), pyam 
+* [Python](https://www.python.org/) working on your computer
+* the [Pyomo](http://www.pyomo.org/) package
+* [Gurobi](https://www.gurobi.com/) (or other solver) 
+* the [pyam](pyam-iamc.readthedocs.io/) package 
 
 ## Scientific publications
 [1] T. Perger, L. Wachter, A. Fleischhacker, H. Auer, PV sharing in local communities: Peer-to-peer trading under consideration of the prosumers’ willingness-to-pay, In: Sustainable Cities and Society (2021), DOI: https://doi.org/10.1016/j.scs.2020.102634 
